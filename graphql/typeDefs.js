@@ -35,10 +35,19 @@ module.exports = gql`
     
   }
   input TaskInput {
+    id:ID
     name:String!
     desc:String
     duration:String!
     priority:Int!
+    steps:[stepsInput]
+  }
+  input UpdateTaskInput {
+    id:ID!
+    name:String
+    desc:String
+    duration:String
+    priority:Int
     steps:[stepsInput]
   }
 input stepsInput{
@@ -55,7 +64,8 @@ input stepsInput{
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(username: String!, password: String!): User!
-    createTask(taskInput:TaskInput):Task
+    createTask(taskInput:TaskInput):Task!
+    updateTask(updateTaskInput:UpdateTaskInput):Task!
 
   }
 `;

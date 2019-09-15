@@ -64,6 +64,15 @@ Mutation: {
               throw Error(error)
           }
 },
-//async updateTask(_,{})
+ async updateTask(_,{updateTaskInput:tasked},context){
+     const user = await checkAuth(context)
+     
+       const  task =await Task.findByIdAndUpdate(tasked.id,tasked)
+       if (!task )throw Error(`Task ${tasked.id} Has Not Been Found`,{errors:{task:`task ${taskInput.name} is not in the database `}})
+
+task.save()
+return task
+     
+ }
 }
   }
