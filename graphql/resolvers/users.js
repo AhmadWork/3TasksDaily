@@ -8,7 +8,7 @@ const {
 } = require('../../util/validators');
 const { SECRET_KEY } = require('../../config');
 const User = require('../../models/User');
-
+const Task = require('../../models/Task')
 function generateToken(user) {
   return jwt.sign(
     {
@@ -22,6 +22,26 @@ function generateToken(user) {
 }
 
 module.exports = {
+  Query: {
+async users(){
+
+  try {
+    let users =await User.find();
+for(user in users){
+  let tasks = await Task.find({user_id})
+user.tasks=tasks
+}
+    
+
+    return users
+  } catch (error) {
+    throw new Error(error)
+  }
+  
+  
+  
+}
+  },
   Mutation: {
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
@@ -36,7 +56,7 @@ module.exports = {
         errors.general = 'User not found';
         throw new UserInputError('User not found', { errors });
       }
-
+    
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
         errors.general = 'Wrong crendetials';
@@ -76,6 +96,16 @@ module.exports = {
           }
         });
       }
+
+      const checkemail = await User.findOne({ email });
+      if(checkemail){
+        throw new UserInputError('email is taken',{
+          errors:{
+            email:'this email is taken'
+          }
+        })
+      }
+
       // hash password and create an auth token
       password = await bcrypt.hash(password, 12);
 

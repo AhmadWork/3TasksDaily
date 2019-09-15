@@ -1,5 +1,5 @@
 const usersResolvers = require('./users')
-
+const taksResolvers = require('./tasks')
  function hello ()  {
     return 'Hello world!';
   };
@@ -8,9 +8,11 @@ const usersResolvers = require('./users')
 module.exports={
 
   Query:{
-    hello
+    ...usersResolvers.Query,
+    ...taksResolvers.Query
   },
   Mutation:{
-    ...usersResolvers.Mutation
+    ...usersResolvers.Mutation,
+    ...taksResolvers.Mutation
   }
 }
